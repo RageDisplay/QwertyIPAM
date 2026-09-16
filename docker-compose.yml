@@ -1,0 +1,31 @@
+services:
+  vectrixipam:
+    build: .
+    image: vectrixipam:latest
+    container_name: vectrixipam
+    restart: unless-stopped
+    # Default bridge networking (as below) is enough for ICMP/TCP discovery
+    # and hostname lookup, but Docker's bridge puts the container behind NAT
+    # in its own L2 segment, so it cannot see real MAC addresses on your LAN.
+    # To get MAC addresses, put the container on the physical network
+    # directly, e.g. by replacing the "ports"/networking below with a
+    # macvlan network attached to your LAN interface, or with:
+    #   network_mode: host
+    # (host networking is Linux-only; drop the "ports" mapping if you use it,
+    # since the container then shares the host's network stack directly).
+    ports:
+      - "8080:8080"
+    volumes:
+      - vectrixipam-data:/data
+    cap_add:
+      # NET_RAW: unprivileged ICMP ping. Without it, discovery falls back to
+      #          TCP-connect probing on common ports.
+      # NET_ADMIN: raw ARP requests used to resolve MAC addresses. Without it,
+      #          discovery still finds hosts, just without MAC addresses.
+      - NET_RAW
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ping_group_range=0 2147483647
+
+volumes:
+  vectrixipam-data:
