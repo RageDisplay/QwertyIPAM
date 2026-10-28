@@ -2,7 +2,7 @@
 
 Простой IPAM (IP Address Management) на Go: реестр подсетей и адресов с
 веб-интерфейсом и кнопкой автоматического обнаружения хостов в подсети.
-https://drive.google.com/file/d/1y42tAECDCfMbXCpr2gNHr4Y2X1ufQZw7/view?usp=sharing
+
 ## Возможности
 
 - Учёт подсетей (CIDR, описание, VLAN).
